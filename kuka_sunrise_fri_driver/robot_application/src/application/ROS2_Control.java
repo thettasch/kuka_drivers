@@ -8,6 +8,7 @@ import ros2.modules.TCPConnection;
 
 import com.kuka.roboticsAPI.applicationModel.RoboticsAPIApplication;
 import com.kuka.roboticsAPI.deviceModel.LBR;
+import com.kuka.generated.ioAccess.MediaFlangeIOGroup;
 
 /**
  * Implementation of a robot application.
@@ -30,6 +31,8 @@ import com.kuka.roboticsAPI.deviceModel.LBR;
 public class ROS2_Control extends RoboticsAPIApplication {
 	@Inject
 	private LBR _lbr;
+	@Inject
+	private MediaFlangeIOGroup _mediaFlange;
 
 	private TCPConnection _TCPConnection;
 	private ROS2Connection _ROS2Connection;
@@ -40,7 +43,7 @@ public class ROS2_Control extends RoboticsAPIApplication {
 		// initialize your application here
 		_TCPConnection = new TCPConnection(30000);
 		_ROS2Connection = new ROS2Connection();
-		_FRIManager = new FRIManager(_lbr, getApplicationControl());
+		_FRIManager = new FRIManager(_lbr, getApplicationControl(), _mediaFlange);
 
 		_FRIManager.registerROS2ConnectionModule(_ROS2Connection);
 		_TCPConnection.registerROS2ConnectionModule(_ROS2Connection);

@@ -24,6 +24,7 @@ import com.kuka.roboticsAPI.motionModel.controlModeModel.IMotionControlMode;
 import com.kuka.roboticsAPI.motionModel.controlModeModel.JointImpedanceControlMode;
 import com.kuka.roboticsAPI.motionModel.controlModeModel.PositionControlMode;
 import com.kuka.roboticsAPI.requestModel.GetApplicationOverrideRequest;
+import com.kuka.generated.ioAccess.MediaFlangeIOGroup;
 
 public class FRIManager{
 	public enum CommandResult{
@@ -35,6 +36,7 @@ public class FRIManager{
 
 	private State _currentState;
 	private LBR _lbr;
+	private MediaFlangeIOGroup _mediaFlange;
 	private FRISession _FRISession;
 	private FRIConfiguration _FRIConfiguration;
 	private IMotionControlMode _controlMode;
@@ -45,11 +47,31 @@ public class FRIManager{
 
 	private static double[] stiffness_ = new double[7];
 
-	public FRIManager(LBR lbr, IApplicationControl applicationControl){
+	private void registerIO() {
+		// List of INPUTS to register
+		final String[] inputs = {"UserButton"};
+		// List of OUTPUTS to register
+		final String[] outputs = {"LEDBlue", "OutputX3Pin1", "OutputX3Pin11", "OutputX3Pin12"};
+		
+		// Maximum number of registered IOs (always 10 due to FRI limitations)
+		int count = 10;
+		for(String input_name : inputs){
+			_FRIConfiguration.registerIO(_mediaFlange.getInput(input_name));
+			if(--count <= 0) return;
+		}
+		for(String output_name : outputs){
+			_FRIConfiguration.registerIO(_mediaFlange.getOutput(output_name));
+			if(--count <= 0) return;
+		}
+	}
+
+	public FRIManager(LBR lbr, IApplicationControl applicationControl, MediaFlangeIOGroup mf){
 		_currentState = new InactiveState();
 		_lbr = lbr;
+		_mediaFlange = mf;
 		_FRISession = null;
 		_FRIConfiguration = new FRIConfigurationParams().toFRIConfiguration(_lbr);
+		registerIO();
 		Arrays.fill(stiffness_, 200);
 		_controlMode = new JointImpedanceControlMode(stiffness_);
 		//_controlMode = new PositionControlMode();
@@ -183,6 +205,7 @@ public class FRIManager{
 		@Override
 		public CommandResult setFRIConfig(FRIConfigurationParams friConfigurationParams){
 			FRIManager.this._FRIConfiguration = friConfigurationParams.toFRIConfiguration(FRIManager.this._lbr);
+			registerIO();
 			return CommandResult.EXECUTED;
 		}
 		@Override
