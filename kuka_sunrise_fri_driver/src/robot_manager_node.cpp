@@ -139,7 +139,8 @@ RobotManagerNode::on_configure(const rclcpp_lifecycle::State &)
   if (!kuka_drivers_core::changeControllerState(
         change_controller_state_client_,
         {kuka_drivers_core::FRI_CONFIGURATION_CONTROLLER, kuka_drivers_core::CONTROL_MODE_HANDLER,
-         kuka_drivers_core::EVENT_BROADCASTER, kuka_drivers_core::JOINT_GROUP_IMPEDANCE_CONTROLLER},
+         kuka_drivers_core::EVENT_BROADCASTER, kuka_drivers_core::JOINT_GROUP_IMPEDANCE_CONTROLLER,
+         "gpio_command_controller"},
         {}))
   {
     RCLCPP_ERROR(get_logger(), "Could not activate configuration controllers");
@@ -161,7 +162,8 @@ RobotManagerNode::on_cleanup(const rclcpp_lifecycle::State &)
   if (!kuka_drivers_core::changeControllerState(
         change_controller_state_client_, {},
         {kuka_drivers_core::FRI_CONFIGURATION_CONTROLLER, kuka_drivers_core::CONTROL_MODE_HANDLER,
-         kuka_drivers_core::EVENT_BROADCASTER, kuka_drivers_core::JOINT_GROUP_IMPEDANCE_CONTROLLER},
+         kuka_drivers_core::EVENT_BROADCASTER, kuka_drivers_core::JOINT_GROUP_IMPEDANCE_CONTROLLER,
+         "gpio_command_controller"},
         SwitchController::Request::BEST_EFFORT))
   {
     RCLCPP_ERROR(get_logger(), "Could not stop controllers");
