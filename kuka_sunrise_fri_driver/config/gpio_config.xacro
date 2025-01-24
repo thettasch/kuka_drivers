@@ -5,6 +5,12 @@
       <command_interface data_type="boolean" name="MediaFlange.LEDBlue">
         <param name="initial_value">0</param>
       </command_interface>
+      <!-- <command_interface data_type="boolean" name="MediaFlange.LEDRed">
+        <param name="initial_value">0</param>
+      </command_interface> -->
+      <command_interface data_type="boolean" name="MediaFlange.LEDGreen">
+        <param name="initial_value">1</param>
+      </command_interface>
       <command_interface data_type="boolean" name="MediaFlange.OutputX3Pin1">
         <param name="initial_value">0</param>
       </command_interface>
@@ -15,6 +21,7 @@
         <param name="initial_value">0</param>
       </command_interface>
       <state_interface data_type="boolean" name="MediaFlange.UserButton"/>
+      <state_interface data_type="boolean" name="MediaFlange.LEDRed"/>
     </gpio>
   </xacro:macro>
 </robot>
