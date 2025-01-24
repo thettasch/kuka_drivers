@@ -2,8 +2,8 @@
 repositories:
   kuka_robot_descriptions:
     type: git
-    url: https://github.com/kroshu/kuka_robot_descriptions.git
-    version: humble
+    url: https://github.com/thettasch/kuka_robot_descriptions.git
+    version: thettasch/iiwa14-fix
   kuka-external-control-sdk:
     type: git
     url: https://github.com/kroshu/kuka-external-control-sdk.git
